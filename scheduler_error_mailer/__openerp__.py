@@ -1,7 +1,7 @@
-# -*- coding: utf-8 -*-
+# -*- encoding: utf-8 -*-
 ##############################################################################
 #
-#    Asterisk Click2Dial module for OpenERP
+#    Model module for OpenERP
 #    Copyright (C) 2010 Sébastien BEAU <sebastien.beau@akretion.com>
 #
 #    This program is free software: you can redistribute it and/or modify
@@ -19,5 +19,20 @@
 #
 ##############################################################################
 
-import ir_cron
+
+{
+    'name': 'Scheduler Error Mailer',
+    'version': '0.1',
+    'category': 'Generic Modules/Others',
+    'license': 'AGPL-3',
+    'description': """This module dfkdsjfkdsjkfjksadd the posibility to send a email when a scheduler raise an error""",
+    'author': 'Akretion',
+    'website': 'http://www.akretion.com/',
+    'depends': ['poweremail'],
+    'init_xml': [],
+    'update_xml': ['ir_cron.xml'],
+    'demo_xml': [],
+    'installable': True,
+    'active': False,
+}
 
