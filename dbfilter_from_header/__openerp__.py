@@ -18,14 +18,35 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-import re
-from openerp.addons.web.controllers import main as web_main
+{
+    "name" : "dbfilter_from_header",
+    "version" : "1.0",
+    "author" : "Therp BV",
+    "complexity": "normal",
+    "description": """
+    This addon lets you pass a dbfilter as a HTTP header.
 
-db_list_org = web_main.db_list
+    This is interesting for setups where database names can't be mapped to 
+    proxied host names.
 
-def db_list(req, force=False):
-    db_filter = req.httprequest.environ.get('HTTP_X_OPENERP_DBFILTER', '.*')
-    dbs = db_list_org(req, force=force)
-    return [db for db in dbs if re.match(db_filter, db)]
+    In nginx, use
+    proxy_set_header X-OpenERP-dbfilter [your filter];
 
-web_main.db_list = db_list
+    The addon has to be loaded as server-wide module.
+    """,
+    "category" : "Tools",
+    "depends" : [
+        'web',
+    ],
+    "data" : [
+    ],
+    "js": [
+    ],
+    "css": [
+    ],
+    "auto_install": False,
+    "installable": True,
+    "external_dependencies" : {
+        'python' : [],
+    },
+}
