@@ -19,7 +19,29 @@
 #
 ##############################################################################
 
-from . import rule
-from . import log
+{
+    'name': "Audit Log",
+    'description': """
+Track every user operation on all the objects of the system.
+============================================================
+
+The administrator can subscribe to rules for create, read, write and delete on
+models and can check logs.
+    """,
+    'version': "1.0",
+    'author': "ABF OSIELL",
+    'website': "http://www.osiell.com",
+    'category': "Tools",
+    'depends': [
+        'base',
+    ],
+    'data': [
+        'security/ir.model.access.csv',
+        'views/auditlog_view.xml',
+    ],
+    'application': True,
+    'installable': True,
+    'active': False,
+}
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
