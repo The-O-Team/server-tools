@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <odoo>
     <record id="cleanup_create_indexes_wizard_view_form" model="ir.ui.view">
         <field name="model">cleanup.create_indexes.wizard</field>
@@ -18,13 +18,8 @@
         <field name="name">Create missing indexes</field>
         <field name="type">ir.actions.server</field>
         <field name="state">code</field>
-        <field
-            name="model_id"
-            ref="database_cleanup.model_cleanup_create_indexes_wizard"
-        />
-        <field
-            name="code"
-        >action = env.get('cleanup.create_indexes.wizard').get_wizard_action()</field>
+        <field name="model_id" ref="database_cleanup.model_cleanup_create_indexes_wizard" />
+        <field name="code">action = self.get_wizard_action(cr, uid, context=context)</field>
     </record>
 
     <record id="cleanup_create_indexes_line_view_tree" model="ir.ui.view">
@@ -43,14 +38,15 @@
         <field name="name">Create</field>
         <field name="type">ir.actions.server</field>
         <field name="state">code</field>
-        <field
-            name="model_id"
-            ref="database_cleanup.model_cleanup_create_indexes_line"
-        />
-        <field name="code">records.purge()</field>
-        <field
-            name="binding_model_id"
-            ref="database_cleanup.model_cleanup_create_indexes_line"
-        />
+        <field name="model_id" ref="database_cleanup.model_cleanup_create_indexes_line" />
+        <field name="code">self.purge(cr, uid, context.get('active_ids', []), context)</field>
+    </record>
+
+    <record id="cleanup_create_indexes_line_action_value" model="ir.values">
+        <field name="name">Create indexes</field>
+        <field name="key">action</field>
+        <field name="key2">client_action_multi</field>
+        <field name="model">cleanup.create_indexes.line</field>
+        <field name="value" eval="'ir.actions.server,%d' % ref('database_cleanup.cleanup_create_indexes_line_action')" />
     </record>
 </odoo>
