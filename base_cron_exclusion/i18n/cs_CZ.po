@@ -20,8 +20,9 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
 #. module: base_cron_exclusion
-#: model:ir.model.fields,field_description:base_cron_exclusion.field_ir_cron__mutually_exclusive_cron_ids
-#: model_terms:ir.ui.view,arch_db:base_cron_exclusion.ir_cron_view_form
+#: model:ir.model.fields,field_description:base_cron_exclusion.field_ir_cron_mutually_exclusive_cron_ids
+#: model:ir.model.fields,field_description:base_cron_exclusion.field_nsca_check_mutually_exclusive_cron_ids
+#: model:ir.ui.view,arch_db:base_cron_exclusion.ir_cron_view
 msgid "Mutually Exclusive Scheduled Actions"
 msgstr "Vzájemně výlučné plánované akce"
 
@@ -31,8 +32,7 @@ msgid "Scheduled Actions"
 msgstr "Plánované akce"
 
 #. module: base_cron_exclusion
-#. odoo-python
-#: code:addons/base_cron_exclusion/models/ir_cron.py:0
+#: code:addons/base_cron_exclusion/models/ir_cron.py:21
 #, python-format
 msgid "You can not mutually exclude a scheduled actions with itself."
 msgstr "Nemůžete vzájemně vylučují naplánovaná akce se sebou samým."
