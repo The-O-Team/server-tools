@@ -5,13 +5,13 @@
 
 from odoo import SUPERUSER_ID
 from odoo.exceptions import UserError
-from odoo.tests import TransactionCase
+from odoo.tests import SavepointCase
 
 
-class SudoTechCase(TransactionCase):
+class SudoTechCase(SavepointCase):
     @classmethod
     def setUpClass(cls):
-        super().setUpClass()
+        super(SudoTechCase, cls).setUpClass()
         cls.user_tech = (
             cls.env["res.users"]
             .with_context(tracking_disable=True, no_reset_password=True)
