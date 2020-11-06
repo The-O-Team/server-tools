@@ -5,67 +5,22 @@
         <field name="model">upgrade.install.wizard</field>
         <field name="arch" type="xml">
             <form>
-                <header>
-                  <field name="state" widget="statusbar" />
-                </header>
-                <group invisible="state != 'draft'">
+                <field name="state" invisible="1" />
+                <group states="init" colspan="4">
                     <p
-                        class="alert alert-warning"
-                        role="alert"
-                        colspan="2"
-                    >This will install the selected modules on the database. Do not continue if you use this database in production.</p>
+                    >This will install all modules on the database. Do not continue if you use this database in production.</p>
+                    <field name="to_install" />
                 </group>
-                <group invisible="state != 'done'">
-                    <p
-                        class="alert alert-info"
-                        role="alert"
-                        colspan="2"
-                    >The modules have been installed successfuly</p>
-                </group>
-                <header invisible="state != 'draft'">
-                    <button
-                        name="select_installable_modules"
-                        type="object"
-                        string="All Modules"
-                    />
-                    <button
-                        name="select_odoo_modules"
-                        type="object"
-                        string="All Odoo SA Modules"
-                        class="btn-primary"
-                    />
-                    <button
-                        name="select_oca_modules"
-                        type="object"
-                        string="All OCA Modules"
-                    />
-                    <button
-                        name="select_other_modules"
-                        type="object"
-                        string="All Other Modules"
-                    />
-                </header>
-                <button
-                    name="unselect_modules"
-                    type="object"
-                    string="Clear the list"
-                    invisible="state != 'draft'"
-                />
-                <group invisible="state != 'draft'">
-                    <field name="module_qty" />
-                    <field
-                        name="module_ids"
-                        widget="many2many_tags"
-                        options="{'no_create': True}"
-                    />
+                <group states="ready" colspan="4">
+                    <p>Modules installed</p>
                 </group>
                 <footer>
                     <button
-                        name="install_modules"
-                        type="object"
                         class="btn-primary"
-                        string="Install Modules"
-                        invisible="state != 'draft'"
+                        string="Continue"
+                        name="install_all"
+                        type="object"
+                        states="init"
                     />
                     <button special="cancel" string="Close" class="btn-default" />
                 </footer>
@@ -74,7 +29,7 @@
     </record>
 
     <record id="action_upgrade_install_wizard" model="ir.actions.act_window">
-        <field name="name">Install Modules Wizard</field>
+        <field name="name">Install Modules</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">upgrade.install.wizard</field>
         <field name="view_mode">form,tree</field>
@@ -82,7 +37,7 @@
     </record>
 
     <menuitem
-        name="Install Modules Wizard"
+        name="Install  Modules"
         id="menu_upgrade_install"
         parent="menu_upgrade"
         action="action_upgrade_install_wizard"

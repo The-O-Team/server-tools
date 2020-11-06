@@ -2,13 +2,13 @@
 # Copyright 2016 Opener B.V. <https://opener.am>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from urllib.error import URLError
+import logging
 
-import odoorpc
-
-from odoo import api, fields, models
+from odoo import fields, models
 from odoo.exceptions import UserError
 from odoo.tools.translate import _
+
+from .. import apriori
 
 
 class UpgradeComparisonConfig(models.Model):
@@ -27,29 +27,14 @@ class UpgradeComparisonConfig(models.Model):
 
     password = fields.Char(required=True, default="admin")
 
-    version = fields.Char()
-
-    analysis_ids = fields.One2many(
-        string="Analyses", comodel_name="upgrade.analysis", inverse_name="config_id"
-    )
-    analysis_qty = fields.Integer(compute="_compute_analysis_qty")
-
-    @api.depends("analysis_ids")
-    def _compute_analysis_qty(self):
-        for config in self:
-            config.analysis_qty = len(config.analysis_ids)
+    last_log = fields.Text()
 
     def get_connection(self):
         self.ensure_one()
-        try:
-            remote = odoorpc.ODOO(self.server, port=self.port)
-        except URLError as exc:
-            raise UserError(
-                _("Could not connect the Odoo server at %(server)s:%(port)s")
-                % {"server": self.server, "port": self.port}
-            ) from exc
+        import odoorpc
+
+        remote = odoorpc.ODOO(self.server, port=self.port)
         remote.login(self.database, self.username, self.password)
-        self.version = remote.version
         return remote
 
     def test_connection(self):
@@ -60,37 +45,44 @@ class UpgradeComparisonConfig(models.Model):
             ids = user_model.search([("login", "=", "admin")])
             user_info = user_model.read([ids[0]], ["name"])[0]
         except Exception as e:
-            raise UserError(_("Connection failed.\n\nDETAIL: %s") % e) from e
-        return {
-            "type": "ir.actions.client",
-            "tag": "display_notification",
-            "params": {
-                "type": "info",
-                "message": _(
-                    "You are correctly connected to the server %(server)s"
-                    " (version %(version)s) with the user %(user_name)s"
-                )
-                % dict(
-                    server=self.server,
-                    version=self.version,
-                    user_name=user_info["name"],
-                ),
-            },
-        }
+            raise UserError(_("Connection failed.\n\nDETAIL: %s") % e)
+        raise UserError(_("%s is connected.") % user_info["name"])
 
-    def new_analysis(self):
+    def analyze(self):
+        """ Run the analysis wizard """
         self.ensure_one()
-        analysis = self.env["upgrade.analysis"].create({"config_id": self.id})
+        wizard = self.env["upgrade.analysis.wizard"].create(
+            {"server_config_id": self.id}
+        )
         return {
-            "name": analysis._description,
+            "name": wizard._description,
             "view_mode": "form",
-            "res_model": analysis._name,
+            "res_model": wizard._name,
             "type": "ir.actions.act_window",
-            # "target": "new",
-            "res_id": analysis.id,
-            # "nodestroy": True,
+            "target": "new",
+            "res_id": wizard.id,
+            "nodestroy": True,
         }
 
-    def action_show_analysis(self):
+    def install_modules(self):
+        """ Install same modules as in source DB """
         self.ensure_one()
+        connection = self.get_connection()
+        remote_module_obj = connection.env["ir.module.module"]
+        remote_module_ids = remote_module_obj.search([("state", "=", "installed")])
+
+        modules = []
+        for module_id in remote_module_ids:
+            mod = remote_module_obj.read([module_id], ["name"])[0]
+            mod_name = mod["name"]
+            mod_name = apriori.renamed_modules.get(mod_name, mod_name)
+            modules.append(mod_name)
+        _logger = logging.getLogger(__name__)
+        _logger.debug("remote modules %s", modules)
+        local_modules = self.env["ir.module.module"].search(
+            [("name", "in", modules), ("state", "=", "uninstalled")]
+        )
+        _logger.debug("local modules %s", ",".join(local_modules.mapped("name")))
+        if local_modules:
+            local_modules.write({"state": "to install"})
         return {}
