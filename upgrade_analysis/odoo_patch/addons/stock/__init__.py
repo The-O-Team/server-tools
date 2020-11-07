@@ -1,11 +1,17 @@
-# flake8: noqa: B902
 from odoo.addons import stock
-from ...odoo_patch import OdooPatch
 
 
-class PreInitHookPatch(OdooPatch):
-    target = stock
-    method_names = ["pre_init_hook"]
+def pre_init_hook(cr):
+    # <OpenUpgrade:REMOVE>
+    # don't uninstall data as this breaks the analysis
+    # Origin of this code is https://github.com/odoo/odoo/issues/22243
+    # env = api.Environment(cr, SUPERUSER_ID, {})
+    # env['ir.model.data'].search([
+    #     ('model', 'like', '%stock%'),
+    #     ('module', '=', 'stock')
+    # ]).unlink()
+    pass
+    # </OpenUpgrade>
 
-    def pre_init_hook(cr):
-        """Don't unlink stock data on reinstall"""
+
+stock.pre_init_hook = pre_init_hook
