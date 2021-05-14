@@ -6,35 +6,33 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 14.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2021-05-14 19:47+0000\n"
-"Last-Translator: Yves Le Doeuff <yld@alliasys.fr>\n"
+"Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.3.2\n"
 
 #. module: upgrade_analysis
 #: model_terms:ir.ui.view,arch_db:upgrade_analysis.view_upgrade_install_wizard_form
 msgid "All Modules"
-msgstr "Tous les modules"
+msgstr ""
 
 #. module: upgrade_analysis
 #: model_terms:ir.ui.view,arch_db:upgrade_analysis.view_upgrade_install_wizard_form
 msgid "All OCA Modules"
-msgstr "Tous les modules OCA"
+msgstr ""
 
 #. module: upgrade_analysis
 #: model_terms:ir.ui.view,arch_db:upgrade_analysis.view_upgrade_install_wizard_form
 msgid "All Odoo SA Modules"
-msgstr "Tous les modules Odoo SA"
+msgstr ""
 
 #. module: upgrade_analysis
 #: model_terms:ir.ui.view,arch_db:upgrade_analysis.view_upgrade_install_wizard_form
 msgid "All Other Modules"
-msgstr "Tous les autres modules"
+msgstr ""
 
 #. module: upgrade_analysis
 #: model:ir.model.fields,field_description:upgrade_analysis.field_upgrade_comparison_config__analysis_ids
@@ -63,7 +61,6 @@ msgid "Attributes"
 msgstr ""
 
 #. module: upgrade_analysis
-#. odoo-python
 #: code:addons/upgrade_analysis/wizards/upgrade_generate_record_wizard.py:0
 #, python-format
 msgid "Cannot seem to install or upgrade modules %s"
@@ -91,7 +88,6 @@ msgid "Comparison Configurations"
 msgstr ""
 
 #. module: upgrade_analysis
-#. odoo-python
 #: code:addons/upgrade_analysis/models/upgrade_comparison_config.py:0
 #, python-format
 msgid ""
@@ -106,10 +102,9 @@ msgid "Continue"
 msgstr ""
 
 #. module: upgrade_analysis
-#. odoo-python
 #: code:addons/upgrade_analysis/models/upgrade_comparison_config.py:0
 #, python-format
-msgid "Could not connect the Odoo server at %(server)s:%(port)s"
+msgid "Could not connect the Odoo server at %s:%s"
 msgstr ""
 
 #. module: upgrade_analysis
@@ -148,11 +143,7 @@ msgid "Database"
 msgstr ""
 
 #. module: upgrade_analysis
-#: model:ir.model.fields,field_description:upgrade_analysis.field_upgrade_record__definition
-msgid "Definition"
-msgstr ""
-
-#. module: upgrade_analysis
+#: model:ir.model.fields,field_description:upgrade_analysis.field_ir_module_module__display_name
 #: model:ir.model.fields,field_description:upgrade_analysis.field_upgrade_analysis__display_name
 #: model:ir.model.fields,field_description:upgrade_analysis.field_upgrade_attribute__display_name
 #: model:ir.model.fields,field_description:upgrade_analysis.field_upgrade_comparison_config__display_name
@@ -193,6 +184,7 @@ msgid "Generate Records Wizard"
 msgstr ""
 
 #. module: upgrade_analysis
+#: model:ir.model.fields,field_description:upgrade_analysis.field_ir_module_module__id
 #: model:ir.model.fields,field_description:upgrade_analysis.field_upgrade_analysis__id
 #: model:ir.model.fields,field_description:upgrade_analysis.field_upgrade_attribute__id
 #: model:ir.model.fields,field_description:upgrade_analysis.field_upgrade_comparison_config__id
@@ -221,6 +213,17 @@ msgstr ""
 #. module: upgrade_analysis
 #: model:ir.model.fields,field_description:upgrade_analysis.field_ir_module_module__is_odoo_module
 msgid "Is Odoo Module"
+msgstr ""
+
+#. module: upgrade_analysis
+#: model:ir.model.fields,field_description:upgrade_analysis.field_ir_module_module____last_update
+#: model:ir.model.fields,field_description:upgrade_analysis.field_upgrade_analysis____last_update
+#: model:ir.model.fields,field_description:upgrade_analysis.field_upgrade_attribute____last_update
+#: model:ir.model.fields,field_description:upgrade_analysis.field_upgrade_comparison_config____last_update
+#: model:ir.model.fields,field_description:upgrade_analysis.field_upgrade_generate_record_wizard____last_update
+#: model:ir.model.fields,field_description:upgrade_analysis.field_upgrade_install_wizard____last_update
+#: model:ir.model.fields,field_description:upgrade_analysis.field_upgrade_record____last_update
+msgid "Last Modified on"
 msgstr ""
 
 #. module: upgrade_analysis
@@ -282,13 +285,9 @@ msgstr ""
 
 #. module: upgrade_analysis
 #: model:ir.model,name:upgrade_analysis.model_ir_module_module
+#: model:ir.model.fields,field_description:upgrade_analysis.field_upgrade_install_wizard__module_ids
 #: model:ir.model.fields,field_description:upgrade_analysis.field_upgrade_record__module
 msgid "Module"
-msgstr ""
-
-#. module: upgrade_analysis
-#: model:ir.model.fields,field_description:upgrade_analysis.field_upgrade_install_wizard__module_ids
-msgid "Modules"
 msgstr ""
 
 #. module: upgrade_analysis
@@ -314,10 +313,9 @@ msgid "New Analysis"
 msgstr ""
 
 #. module: upgrade_analysis
-#. odoo-python
 #: code:addons/upgrade_analysis/models/upgrade_record.py:0
 #, python-format
-msgid "No manifest found in %(addon_dir)s"
+msgid "No manifest found in %s"
 msgstr ""
 
 #. module: upgrade_analysis
@@ -365,6 +363,17 @@ msgstr ""
 msgid ""
 "Set to Create if a field is newly created in this module. If this module "
 "modifies an attribute of an existing field, set to Modify."
+msgstr ""
+
+#. module: upgrade_analysis
+#: model:ir.model.fields,field_description:upgrade_analysis.field_ir_module_module__smart_search
+#: model:ir.model.fields,field_description:upgrade_analysis.field_upgrade_analysis__smart_search
+#: model:ir.model.fields,field_description:upgrade_analysis.field_upgrade_attribute__smart_search
+#: model:ir.model.fields,field_description:upgrade_analysis.field_upgrade_comparison_config__smart_search
+#: model:ir.model.fields,field_description:upgrade_analysis.field_upgrade_generate_record_wizard__smart_search
+#: model:ir.model.fields,field_description:upgrade_analysis.field_upgrade_install_wizard__smart_search
+#: model:ir.model.fields,field_description:upgrade_analysis.field_upgrade_record__smart_search
+msgid "Smart Search"
 msgstr ""
 
 #. module: upgrade_analysis
@@ -417,10 +426,9 @@ msgid "Type"
 msgstr ""
 
 #. module: upgrade_analysis
-#. odoo-python
 #: code:addons/upgrade_analysis/models/upgrade_analysis.py:0
 #, python-format
-msgid "Unexpected root Element: %(root)s in file: %(file)s"
+msgid "Unexpected root Element: %s in file: %s"
 msgstr ""
 
 #. module: upgrade_analysis
@@ -496,7 +504,6 @@ msgid "XML ID"
 msgstr ""
 
 #. module: upgrade_analysis
-#. odoo-python
 #: code:addons/upgrade_analysis/models/upgrade_comparison_config.py:0
 #, python-format
 msgid ""
