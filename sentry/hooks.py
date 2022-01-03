@@ -2,11 +2,10 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 import logging
-import warnings
 from collections import abc
 
 import odoo.http
-from odoo.service.server import server
+from odoo.service import wsgi_server
 from odoo.tools import config as odoo_config
 
 from . import const
@@ -33,26 +32,8 @@ except ImportError:  # pragma: no cover
 
 
 def before_send(event, hint):
-    """Prevent the capture of any exceptions in
-    the DEFAULT_IGNORED_EXCEPTIONS list
-        -- or --
-    Add context to event if include_context is True
+    """Add context to event if include_context is True
     and sanitize sensitive data"""
-
-    exc_info = hint.get("exc_info")
-    if exc_info is None and "log_record" in hint:
-        # Odoo handles UserErrors by logging the raw exception rather
-        # than a message string in odoo/http.py
-        try:
-            module_name = hint["log_record"].msg.__module__
-            class_name = hint["log_record"].msg.__class__.__name__
-            qualified_name = module_name + "." + class_name
-        except AttributeError:
-            qualified_name = "not found"
-
-        if qualified_name in const.DEFAULT_IGNORED_EXCEPTIONS:
-            return None
-
     if event.setdefault("tags", {})["include_context"]:
         cxtest = get_extra_context(odoo.http.request)
         info_request = ["tags", "user", "extra", "request"]
@@ -90,13 +71,6 @@ def initialize_sentry(config):
         _logger.debug(
             "Both sentry_odoo_dir and \
                        sentry_release defined, choosing sentry_release"
-        )
-    if config.get("sentry_transport"):
-        warnings.warn(
-            "`sentry_transport` has been deprecated.  "
-            "Its not neccesary send it, will use `HttpTranport` by default.",
-            DeprecationWarning,
-            stacklevel=1,
         )
     options = {}
     for option in const.get_sentry_options():
@@ -136,12 +110,7 @@ def initialize_sentry(config):
         for item in exclude_loggers:
             ignore_logger(item)
 
-    # The server app is already registered so patch it here
-    if server:
-        server.app = SentryWsgiMiddleware(server.app)
-
-    # Patch the wsgi server in case of further registration
-    odoo.http.Application = SentryWsgiMiddleware(odoo.http.Application)
+    wsgi_server.application = SentryWsgiMiddleware(wsgi_server.application)
 
     with sentry_sdk.push_scope() as scope:
         scope.set_extra("debug", False)

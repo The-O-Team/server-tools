@@ -4,6 +4,7 @@
     sentry-sdk.
 """
 
+from __future__ import absolute_import
 
 import re
 
@@ -12,7 +13,7 @@ from sentry_sdk._compat import text_type
 from .generalutils import string_types, varmap
 
 
-class SanitizeKeysProcessor:
+class SanitizeKeysProcessor(object):
     """Class from raven for sanitize keys, cookies, etc
     Asterisk out things that correspond to a configurable set of keys."""
 
@@ -131,7 +132,7 @@ class SanitizePasswordsProcessor(SanitizeKeysProcessor):
         return self.KEYS
 
     def sanitize(self, item, value):
-        value = super().sanitize(item, value)
+        value = super(SanitizePasswordsProcessor, self).sanitize(item, value)
         if isinstance(value, string_types()) and self.VALUES_RE.match(value):
             return self.MASK
         return value

@@ -2,11 +2,11 @@ try:
     from collections.abc import Mapping
 except ImportError:  # pragma: no cover
     # Python < 3.3
-    from collections.abc import Mapping  # pragma: no cover
+    from collections import Mapping  # pragma: no cover
 
 
 def string_types():
-    """Taken from https://git.io/JIv5J"""
+    """ Taken from https://git.io/JIv5J """
 
     return (str,)
 
@@ -21,7 +21,7 @@ def is_namedtuple(value):
     f = getattr(type(value), "_fields", None)
     if not isinstance(f, tuple):
         return False
-    return all(isinstance(n, str) for n in f)
+    return all(type(n) == str for n in f)
 
 
 def iteritems(d, **kw):
@@ -43,7 +43,7 @@ def varmap(func, var, context=None, name=None):
         return func(name, "<...>")
     context[objid] = 1
 
-    if isinstance(var, list | tuple) and not is_namedtuple(var):
+    if isinstance(var, (list, tuple)) and not is_namedtuple(var):
         ret = [varmap(func, f, context, name) for f in var]
     else:
         ret = func(name, var)
