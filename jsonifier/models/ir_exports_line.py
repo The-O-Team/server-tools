@@ -9,10 +9,11 @@ class IrExportsLine(models.Model):
     _inherit = "ir.exports.line"
 
     target = fields.Char(
+        "Target",
         help="The complete path to the field where you can specify a "
         "target on the step as field:target",
     )
-    active = fields.Boolean(default=True)
+    active = fields.Boolean(string="Active", default=True)
     lang_id = fields.Many2one(
         comodel_name="res.lang",
         string="Language",
@@ -46,13 +47,13 @@ class IrExportsLine(models.Model):
                 raise ValidationError(
                     _("Name and Target must have the same hierarchy depth")
                 )
-            for name, name_with_target in zip(names, names_with_target, strict=True):
+            for name, name_with_target in zip(names, names_with_target):
                 field_name = name_with_target.split(":")[0]
                 if name != field_name:
                     raise ValidationError(
                         _(
                             "The target must reference the same field as in "
-                            "name '%(name)s' not in '%(name_with_target)s'"
+                            "name '%s' not in '%s'"
                         )
-                        % dict(name=name, name_with_target=name_with_target)
+                        % (name, name_with_target)
                     )

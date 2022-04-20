@@ -2,10 +2,10 @@
 # @author Iván Todorovich <ivan.todorovich@camptocamp.com>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
-from odoo.tests.common import TransactionCase
+from odoo.tests.common import SavepointCase
 
 
-class TestJsonifyHelpers(TransactionCase):
+class TestJsonifyHelpers(SavepointCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -36,10 +36,10 @@ class TestJsonifyHelpers(TransactionCase):
         )
 
     def test_helper_format_duration(self):
-        # partner_latitude is not intended for this, but it's a float field in core
+        # credit_limit is not intended for this, but it's a float field in core
         # any float field does the trick here
-        self.partner.partner_latitude = 15.5
+        self.partner.credit_limit = 15.5
         self.assertEqual(
-            self.partner._jsonify_format_duration("partner_latitude"),
+            self.partner._jsonify_format_duration("credit_limit"),
             "15:30",
         )

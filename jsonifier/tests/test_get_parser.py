@@ -1,11 +1,11 @@
 # Copyright 2017 ACSONE SA/NV
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 
-from unittest import mock
+import mock
 
 from odoo import fields, tools
 from odoo.exceptions import UserError
-from odoo.tests.common import TransactionCase
+from odoo.tests.common import SavepointCase
 
 from ..models.utils import convert_simple_to_full_parser
 
@@ -14,7 +14,7 @@ def jsonify_custom(self, field_name):
     return "yeah!"
 
 
-class TestParser(TransactionCase):
+class TestParser(SavepointCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -43,9 +43,20 @@ class TestParser(TransactionCase):
         Langs = cls.env["res.lang"].with_context(active_test=False)
         cls.lang = Langs.search([("code", "=", "fr_FR")])
         cls.lang.active = True
+        cls.env["ir.translation"]._load_module_terms(["base"], [cls.lang.code])
         category = cls.env["res.partner.category"].create({"name": "name"})
-        cls.translated_target = f"name_{cls.lang.code}"
-        category.with_context(lang=cls.lang.code).write({"name": cls.translated_target})
+        cls.translated_target = "name_{}".format(cls.lang.code)
+        cls.env["ir.translation"].create(
+            {
+                "type": "model",
+                "name": "res.partner.category,name",
+                "module": "base",
+                "lang": cls.lang.code,
+                "res_id": category.id,
+                "value": cls.translated_target,
+                "state": "translated",
+            }
+        )
         cls.global_resolver = cls.env["ir.exports.resolver"].create(
             {"python_code": "value['X'] = 'X'; result = value", "type": "global"}
         )
@@ -63,7 +74,7 @@ class TestParser(TransactionCase):
                         0,
                         {
                             "name": "name",
-                            "target": f"name:{cls.translated_target}",
+                            "target": "name:{}".format(cls.translated_target),
                             "lang_id": cls.lang.id,
                         },
                     ),
@@ -79,14 +90,14 @@ class TestParser(TransactionCase):
                 ],
             }
         )
-        cls.category = category.with_context(lang=None)
-        cls.category_lang = category.with_context(lang=cls.lang.code)
+        cls.category = category.with_context({})
+        cls.category_lang = category.with_context({"lang": cls.lang.code})
 
     def test_getting_parser(self):
         expected_parser = [
             "name",
             "active",
-            "partner_latitude",
+            "credit_limit",
             "color",
             ("category_id", ["name"]),
             ("country_id", ["name", "code"]),
@@ -123,7 +134,7 @@ class TestParser(TransactionCase):
         parser = [
             "lang",
             "comment",
-            "partner_latitude",
+            "credit_limit",
             "name",
             "color",
             (
@@ -150,7 +161,7 @@ class TestParser(TransactionCase):
         expected_json = {
             "lang": "en_US",
             "comment": None,
-            "partner_latitude": 0.0,
+            "credit_limit": 0.0,
             "name": "Akretion",
             "color": 0,
             "country": {"code": "FR", "name": "France"},
@@ -165,7 +176,7 @@ class TestParser(TransactionCase):
                     "email": None,
                 }
             ],
-            "create_date": "2019-10-31T14:39:49",
+            "create_date": "2019-10-31T15:39:49+01:00",
             "date": "2019-10-31",
         }
         json_partner = self.partner.jsonify(parser)

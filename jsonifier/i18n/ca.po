@@ -74,12 +74,13 @@ msgid "Custom resolver"
 msgstr ""
 
 #. module: jsonifier
+#: model:ir.model.fields,field_description:jsonifier.field_ir_exports__display_name
+#: model:ir.model.fields,field_description:jsonifier.field_ir_exports_line__display_name
 #: model:ir.model.fields,field_description:jsonifier.field_ir_exports_resolver__display_name
 msgid "Display Name"
 msgstr ""
 
 #. module: jsonifier
-#. odoo-python
 #: code:addons/jsonifier/models/ir_exports_line.py:0
 #, python-format
 msgid "Either set a function or a resolver, not both."
@@ -122,6 +123,8 @@ msgid "Global"
 msgstr ""
 
 #. module: jsonifier
+#: model:ir.model.fields,field_description:jsonifier.field_ir_exports__id
+#: model:ir.model.fields,field_description:jsonifier.field_ir_exports_line__id
 #: model:ir.model.fields,field_description:jsonifier.field_ir_exports_resolver__id
 msgid "ID"
 msgstr ""
@@ -164,6 +167,13 @@ msgid "Language Agnostic"
 msgstr ""
 
 #. module: jsonifier
+#: model:ir.model.fields,field_description:jsonifier.field_ir_exports____last_update
+#: model:ir.model.fields,field_description:jsonifier.field_ir_exports_line____last_update
+#: model:ir.model.fields,field_description:jsonifier.field_ir_exports_resolver____last_update
+msgid "Last Modified on"
+msgstr ""
+
+#. module: jsonifier
 #: model:ir.model.fields,field_description:jsonifier.field_ir_exports_resolver__write_uid
 msgid "Last Updated by"
 msgstr ""
@@ -179,7 +189,6 @@ msgid "Name"
 msgstr ""
 
 #. module: jsonifier
-#. odoo-python
 #: code:addons/jsonifier/models/ir_exports_line.py:0
 #, python-format
 msgid "Name and Target must have the same hierarchy depth"
@@ -198,17 +207,14 @@ msgstr ""
 #. module: jsonifier
 #: model:ir.model.fields,help:jsonifier.field_ir_exports_line__target
 msgid ""
-"The complete path to the field where you can specify a target on the step as "
-"field:target"
+"The complete path to the field where you can specify a target on the step as"
+" field:target"
 msgstr ""
 
 #. module: jsonifier
-#. odoo-python
 #: code:addons/jsonifier/models/ir_exports_line.py:0
 #, python-format
-msgid ""
-"The target must reference the same field as in name '%(name)s' not in "
-"'%(name_with_target)s'"
+msgid "The target must reference the same field as in name '%s' not in '%s'"
 msgstr ""
 
 #. module: jsonifier
@@ -217,7 +223,6 @@ msgid "Type"
 msgstr ""
 
 #. module: jsonifier
-#. odoo-python
 #: code:addons/jsonifier/models/models.py:0
 #, python-format
 msgid "Wrong parser configuration for field: `%s`"

@@ -2,10 +2,10 @@
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 
 from odoo.exceptions import ValidationError
-from odoo.tests.common import TransactionCase
+from odoo.tests.common import SavepointCase
 
 
-class TestIrExportsLine(TransactionCase):
+class TestIrExportsLine(SavepointCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()

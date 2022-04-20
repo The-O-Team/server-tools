@@ -18,6 +18,7 @@ _logger = logging.getLogger(__name__)
 
 
 class Base(models.AbstractModel):
+
     _inherit = "base"
 
     @api.model
@@ -48,6 +49,9 @@ class Base(models.AbstractModel):
         elif field.type == "datetime":
             # Ensures value is a datetime
             value = fields.Datetime.to_datetime(value)
+            # Get the timestamp converted to the client's timezone.
+            # This call also add the tzinfo into the datetime object
+            value = fields.Datetime.context_timestamp(self, value)
             value = value.isoformat()
         elif field.type in ("many2one", "reference"):
             value = value.display_name if value else None
@@ -161,7 +165,7 @@ class Base(models.AbstractModel):
         for lang in parsers:
             translate = lang or parser.get("language_agnostic")
             records = self.with_context(lang=lang) if translate else self
-            for record, json in zip(records, results, strict=True):
+            for record, json in zip(records, results):
                 self._jsonify_record(parsers[lang], record, json)
 
         if resolver:

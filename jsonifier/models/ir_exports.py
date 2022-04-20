@@ -77,6 +77,7 @@ class IrExports(models.Model):
 
     language_agnostic = fields.Boolean(
         default=False,
+        string="Language Agnostic",
         help="If set, will set the lang to False when exporting lines without lang,"
         " otherwise it uses the lang in the given context to export these fields",
     )
@@ -100,7 +101,7 @@ class IrExports(models.Model):
         """
         self.ensure_one()
         parser = {}
-        lang_to_lines = partition(self.export_fields, lambda _l: _l.lang_id.code)
+        lang_to_lines = partition(self.export_fields, lambda l: l.lang_id.code)
         lang_parsers = {}
         for lang in lang_to_lines:
             dict_parser = OrderedDict()

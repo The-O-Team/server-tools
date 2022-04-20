@@ -25,6 +25,7 @@ class FieldResolver(models.Model):
     name = fields.Char()
     type = fields.Selection([("field", "Field"), ("global", "Global")])
     python_code = fields.Text(
+        string="Python Code",
         default="\n".join(["# " + h for h in help_message] + ["result = value"]),
         help="\n".join(help_message),
     )
@@ -35,7 +36,7 @@ class FieldResolver(models.Model):
         context = records.env.context
         if self.type == "global":
             assert len(param) == len(records)
-            for value, record in zip(param, records, strict=True):
+            for value, record in zip(param, records):
                 values = {"value": value, "record": record, "context": context}
                 safe_eval(self.python_code, values, mode="exec", nocopy=True)
                 result.append(values["result"])
