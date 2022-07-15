@@ -2,16 +2,15 @@
 # License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl).
 
 import os
-
-from odoo.tests import TransactionCase
+import unittest
 
 from .. import addon_hash
 from ..models.module import DEFAULT_EXCLUDE_PATTERNS
 
 
-class TestAddonHash(TransactionCase):
+class TestAddonHash(unittest.TestCase):
     def setUp(self):
-        super().setUp()
+        super(TestAddonHash, self).setUp()
         self.sample_dir = os.path.join(
             os.path.dirname(__file__),
             "sample_module",
@@ -31,6 +30,7 @@ class TestAddonHash(TransactionCase):
                 "README.rst",
                 "data/f1.xml",
                 "data/f2.xml",
+                "i18n/en.po",
                 "i18n/en_US.po",
                 "i18n/fr.po",
                 "i18n/fr_BE.po",
@@ -73,4 +73,4 @@ class TestAddonHash(TransactionCase):
             exclude_patterns=["*.pyc", "*.pyo", "*.pot", "static/*"],
             keep_langs=["fr_FR", "nl"],
         )
-        self.assertEqual(checksum, "5a14909e62f05c340f717bd87f64479a862b1941")
+        self.assertEqual(checksum, "fecb89486c8a29d1f760cbd01c1950f6e8421b14")

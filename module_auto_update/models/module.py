@@ -37,8 +37,12 @@ def ensure_module_state(env, modules, state):
     names = [r[0] for r in env.cr.fetchall()]
     if names:
         raise FailedUpgradeError(
-            f"The following modules should be in state {state!r} "
-            f"at this stage: {','.join(names)}. Bailing out for safety."
+            "The following modules should be in state '%s' "
+            "at this stage: %s. Bailing out for safety."
+            % (
+                state,
+                ",".join(names),
+            ),
         )
 
 
@@ -76,7 +80,7 @@ class Module(models.Model):
     def _save_checksums(self, checksums):
         Icp = self.env["ir.config_parameter"]
         Icp.set_param(PARAM_INSTALLED_CHECKSUMS, json.dumps(checksums))
-        Icp.flush_model()
+        Icp.flush()
 
     @api.model
     def _save_installed_checksums(self):

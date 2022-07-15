@@ -4,7 +4,8 @@
 
 import os
 import tempfile
-from unittest import mock
+
+import mock
 
 import odoo
 from odoo.modules import get_module_path
@@ -18,7 +19,7 @@ MODULE_NAME = "module_auto_update"
 
 class TestModule(TransactionCase):
     def setUp(self):
-        super().setUp()
+        super(TestModule, self).setUp()
         self.own_module = self.env["ir.module.module"].search(
             [("name", "=", MODULE_NAME)]
         )
@@ -83,7 +84,7 @@ class TestModule(TransactionCase):
 @odoo.tests.tagged("post_install", "-at_install")
 class TestModuleAfterInstall(TransactionCase):
     def setUp(self):
-        super().setUp()
+        super(TestModuleAfterInstall, self).setUp()
         Imm = self.env["ir.module.module"]
         self.own_module = Imm.search([("name", "=", MODULE_NAME)])
         self.base_module = Imm.search([("name", "=", "base")])
@@ -98,7 +99,7 @@ class TestModuleAfterInstall(TransactionCase):
 
     def test_upgrade_changed_checksum(self):
         Imm = self.env["ir.module.module"]
-        Bmu = type(self.env["base.module.upgrade"])
+        Bmu = self.env["base.module.upgrade"]
 
         # check modules are in installed state
         installed_modules = Imm.search([("state", "=", "installed")])
@@ -126,9 +127,9 @@ class TestModuleAfterInstall(TransactionCase):
 
         # upgrade_changed_checksum commits, so mock that
         with mock.patch.object(self.env.cr, "commit"):
+
             # we simulate an install by setting module states
-            origin = Bmu.upgrade_module
-            Bmu.upgrade_module = upgrade_module_mock
+            Bmu._patch_method("upgrade_module", upgrade_module_mock)
             try:
                 Imm.upgrade_changed_checksum()
                 self.assertEqual(upgrade_module_mock.call_count, 1)
@@ -138,11 +139,11 @@ class TestModuleAfterInstall(TransactionCase):
                 self.assertTrue(saved_checksums["base"])
                 self.assertTrue(saved_checksums[MODULE_NAME])
             finally:
-                Bmu.upgrade_module = origin
+                Bmu._revert_method("upgrade_module")
 
     def test_incomplete_upgrade(self):
         Imm = self.env["ir.module.module"]
-        Bmu = type(self.env["base.module.upgrade"])
+        Bmu = self.env["base.module.upgrade"]
 
         installed_modules = Imm.search([("state", "=", "installed")])
         # change the checksum of 'base'
@@ -165,19 +166,19 @@ class TestModuleAfterInstall(TransactionCase):
 
         # upgrade_changed_checksum commits, so mock that
         with mock.patch.object(self.env.cr, "commit"):
+
             # we simulate an install by setting module states
-            origin = Bmu.upgrade_module
-            Bmu.upgrade_module = upgrade_module_mock
+            Bmu._patch_method("upgrade_module", upgrade_module_mock)
             try:
                 with self.assertRaises(IncompleteUpgradeError):
                     Imm.upgrade_changed_checksum()
                 self.assertEqual(upgrade_module_mock.call_count, 1)
             finally:
-                Bmu.upgrade_module = origin
+                Bmu._revert_method("upgrade_module")
 
     def test_incomplete_upgrade_no_checkusm(self):
         Imm = self.env["ir.module.module"]
-        Bmu = type(self.env["base.module.upgrade"])
+        Bmu = self.env["base.module.upgrade"]
 
         installed_modules = Imm.search([("state", "=", "installed")])
         # change the checksum of 'base'
@@ -199,19 +200,19 @@ class TestModuleAfterInstall(TransactionCase):
 
         # upgrade_changed_checksum commits, so mock that
         with mock.patch.object(self.env.cr, "commit"):
+
             # we simulate an install by setting module states
-            origin = Bmu.upgrade_module
-            Bmu.upgrade_module = upgrade_module_mock
+            Bmu._patch_method("upgrade_module", upgrade_module_mock)
             # got just other modules to_upgrade and no checksum ones
             try:
                 Imm.upgrade_changed_checksum()
                 self.assertEqual(upgrade_module_mock.call_count, 1)
             finally:
-                Bmu.upgrade_module = origin
+                Bmu._revert_method("upgrade_module")
 
     def test_nothing_to_upgrade(self):
         Imm = self.env["ir.module.module"]
-        Bmu = type(self.env["base.module.upgrade"])
+        Bmu = self.env["base.module.upgrade"]
 
         Imm._save_installed_checksums()
 
@@ -222,11 +223,11 @@ class TestModuleAfterInstall(TransactionCase):
 
         # upgrade_changed_checksum commits, so mock that
         with mock.patch.object(self.env.cr, "commit"):
+
             # we simulate an install by setting module states
-            origin = Bmu.upgrade_module
-            Bmu.upgrade_module = upgrade_module_mock
+            Bmu._patch_method("upgrade_module", upgrade_module_mock)
             try:
                 Imm.upgrade_changed_checksum()
                 self.assertEqual(upgrade_module_mock.call_count, 0)
             finally:
-                Bmu.upgrade_module = origin
+                Bmu._revert_method("upgrade_module")
