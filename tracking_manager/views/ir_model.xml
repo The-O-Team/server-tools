@@ -10,57 +10,57 @@
         <field name="arch" type="xml">
             <xpath expr="//sheet/group[1]" position="after">
 
-                <group string="Custom Tracking">
-                    <group>
-                        <field name="active_custom_tracking" string="Active" />
-                        <field
-                            name="automatic_custom_tracking"
-                            string="Automatic configuration"
-                            invisible="not active_custom_tracking"
-                        />
-                        <field
-                            name="automatic_custom_tracking_domain"
-                            invisible="not automatic_custom_tracking"
-                            required="automatic_custom_tracking"
-                            widget="domain"
-                            options="{'model': 'ir.model.fields', 'in_dialog': True, 'foldable': True}"
-                        />
-                        <label
-                            for="update_custom_tracking"
-                            string="Update fields configuration"
-                            invisible="not automatic_custom_tracking"
-                        />
-                        <button
-                            name="update_custom_tracking"
-                            string="Update"
-                            icon="fa-refresh"
+                    <group string="Tracking">
+                        <group>
+                            <field name="apply_custom_tracking" />
+                            <button
+                            name="show_custom_tracked_field"
+                            string="Custom Tracked fields"
                             type="object"
                             class="btn-secondary"
-                            invisible="not automatic_custom_tracking"
+                            attrs="{'invisible': [('apply_custom_tracking', '=', False)]}"
                         />
+                            <button
+                            name="show_o2m_models"
+                            string="One2many related models"
+                            type="object"
+                            class="btn-secondary"
+                            attrs="{'invisible': [('apply_custom_tracking', '=', False)]}"
+                        />
+                        </group>
                     </group>
-                </group>
             </xpath>
-
             <xpath expr="//sheet/group[1]" position="before">
-                        <div class="oe_button_box" name="button_box">
-
-                <button
-                        name="%(ir_model_fields_action)d"
-                        type="action"
+                        <div
+                    class="oe_button_box"
+                    name="button_box"
+                    attrs="{'invisible': [('apply_custom_tracking', '=', False)]}"
+                >
+                            <button
+                        name="show_custom_tracked_field"
+                        type="object"
                         class="oe_stat_button"
                         icon="fa-server"
-                        invisible="not active_custom_tracking"
                     >
                             <field
-                            name="tracked_field_count"
+                            name="field_count"
                             widget="statinfo"
                             string="Tracked Fields"
                         />
-                </button>
-            </div>
-            </xpath>
+                            </button>
+                        </div>
+                </xpath>
+        </field>
+    </record>
 
+    <record id="custom_tracking_view_tree" model="ir.ui.view">
+        <field name="model">ir.model</field>
+        <field name="name">tracking.ir.model.tree</field>
+        <field name="inherit_id" ref="base.view_model_tree" />
+        <field name="arch" type="xml">
+            <xpath expr="//tree/field[@name='transient']" position="after">
+                <field name="apply_custom_tracking" readonly="True" />
+            </xpath>
         </field>
     </record>
 

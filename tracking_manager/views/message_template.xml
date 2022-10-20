@@ -11,19 +11,19 @@
                         <b>
                             <t t-esc="line.get('name')" />: </b>
                         <br />
-                        <t t-foreach="line.get('messages')" t-as="message">
+                        <t t-foreach="line.get('message_by_field')" t-as="message">
                             <ul>
-                                <t t-if="message.get('mode', False) == 'create'">
+                                <t t-if="message.get('mode', False) == 'New'">
                                     <b>New :</b>
                                 </t>
-                                <t t-if="message.get('mode', False) == 'unlink'">
+                                <t t-if="message.get('mode', False) == 'Delete'">
                                     <b>Delete :</b>
                                 </t>
-                                <t t-if="message.get('mode', False) == 'update'">
+                                <t t-if="message.get('mode', False) == 'Change'">
                                     <b>Change :</b>
                                 </t>
                                 <t t-esc="message.get('record')" />
-                                <t t-if="message.get('mode', False) == 'update'">
+                                <t t-if="message.get('mode', False) == 'Change'">
                                     <ul>
                                         <t
                                             t-foreach="message.get('changes')"
