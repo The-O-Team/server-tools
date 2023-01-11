@@ -10,18 +10,19 @@ from ..tools import format_m2m
 class MailTrackingValue(models.Model):
     _inherit = "mail.tracking.value"
 
-    def _create_tracking_values(
+    def create_tracking_values(
         self,
         initial_value,
         new_value,
         col_name,
         col_info,
-        record,
+        tracking_sequence,
+        model_name,
     ):
         if col_info["type"] == "many2many":
             col_info["type"] = "text"
             initial_value = format_m2m(initial_value)
             new_value = format_m2m(new_value)
-        return super()._create_tracking_values(
-            initial_value, new_value, col_name, col_info, record
+        return super().create_tracking_values(
+            initial_value, new_value, col_name, col_info, tracking_sequence, model_name
         )
