@@ -4,4 +4,3 @@
 - Nans Lefebvre \<<nans.lefebvre@acsone.eu>\>
 - Simone Orsi \<<simone.orsi@camptocamp.com>\>
 - Iván Todorovich \<<ivan.todorovich@camptocamp.com>\>
-- Nguyen Minh Chien \<<chien@trobz.com>\>
